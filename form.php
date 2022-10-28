@@ -5,12 +5,135 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-     <form action="form-check.php" method="post">
-     	<h2>Add New Employee</h2>
+
+<?php        
+    //define variables and set to empty
+    $nameErr= $genderErr = $maritalErr = $numberErr = $emailErr = $addressErr = $date_of_birthErr = $date_of_hiringErr = $departmentErr = $nationalityErr = "";
+    $name= $gender = $marital = $number = $email = $address = $date_of_birth = $date_of_hiring = $department = $nationality = "";
+
+        if($_SERVER["REQUEST_METHOD"] == "POST") 
+        {
+        
+          if(empty($_POST["name"])) {
+               $fullnameErr = "Please Enter Valid Name" ;
+               }
+           else { 
+               $name = test_input($_POST["name"]);
+               if(!preg_match ("/^[a-zA-z]*$/", $name) ) {
+               $nameErr = "Only alphabets and whitespace are allowed.";    
+                    }
+          
+               }
+        
+    
+
+        if(empty($_POST["email"])) {
+            $emailErr = " Invalid Email Address";
+        }
+        else {
+            $email = test_input($_POST["email"]);
+            if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $emailErr = " The Email address is incorrect";
+            }
+          }   
+            
+
+
+        if(empty($_POST["gender"])) {
+            $genderErr = "Please Select a Gender"; 
+        }
+        else {
+            $gender = test_input($_POST["gender"]);
+            }
+
+
+
+        if(empty($_POST["marital"])) {
+            $maritalErr = "Please Select a marital status"; 
+        }
+        else {
+            $marital = test_input($_POST["marital"]);
+            }
+        
+
+
+        if(empty($_POST["number"])) {
+            $numberErr = "Please Enter Phone Number"; 
+            }
+        else {
+                $number = test_input($_POST["number"]);
+                if (!preg_match ("/^[0-9]*$/", $number) ){  
+                    $numberErr = "Only numeric value is allowed.";
+                } 
+               }
+        
+
+        if(empty($_POST["address"])) {
+             $addressErr = "Please Enter The Address"; 
+                    }
+        else {
+            $address = test_input($_POST["address"]);
+            if (!preg_match ("/^\\d+ [a-zA-Z ]+, \\d+ [a-zA-Z ]+, [a-zA-Z ]+$/", $address) ) {  
+            $addressErr = "";
+                }
+               } 
+        
+         if(empty($_POST["date_of_birth"])) {
+            $date_of_birthErr = "Please Select Date of Birth"; 
+        }
+        else {
+            $date_of_birth = test_input($_POST["date_of_birth"]);
+            }
+        
+
+        if(empty($_POST["date_of_birth"])) {
+            $date_of_birthErr = "Please Select Date of Birth"; 
+        }
+        else {
+            $date_of_birth = test_input($_POST["date_of_birth"]);
+            }
+
+        if(empty($_POST["date_of_hiring"])) {
+        $date_of_hiringErr = "Please Select Date of Hiring"; 
+        }
+        else {
+            $date_of_hiring = test_input($_POST["date_of_hiring"]);
+            }
+
+        if(empty($_POST["department"])) {
+             $departmentErr = "Please Enter Department"; 
+                    }
+        else {
+            $department = test_input($_POST["department"]);
+            if (!preg_match ("/^[a-zA-z]*$/", $department) ) {  
+            $departmentErr = "Only alphabets and whitespace are allowed.";
+                } 
+               }
+
+        if(empty($_POST["nationality"])) {
+        $nationalityErr = "Please Select Nationality"; 
+        }
+        else {
+            $nationality = test_input($_POST["nationality"]);
+            }
+
+     }
+        function test_input ($data) {
+               $data = trim($data);
+               $data = stripslashes($data);
+               $data = htmlspecialchars($data);
+               return $data;
+        }
+     
+        
+?>
+     <form method="post" action=" <?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+     <h2>Add New Employee</h2>
+                    
                     <label>Name</label>
      	          <input    type="text" 
                               name="name" 
-                              placeholder="Name"><br>
+                              placeholder="Name"><span class="error">* <?php echo $nameErr;?><br>
       <div class="row">
       <div class="column">
                     <label for="gender">Gender</label>
@@ -19,7 +142,7 @@
 	                    <option value="Male">Male</option>
 	                    <option value="Female" >Female</option>
 	                    <option value="RNTS">Rather Not To Say</option>
-                    </select><br><br>
+                    </select><span class="error">* <?php echo $genderErr;?><br><br>
       </div>             
       <div class="column">
                     <label for="marital">Marital Status</label>
@@ -28,44 +151,38 @@
                       <option value="Single">Single</option>
                       <option value="Married" >Married</option>
                       <option value="Divorced">Divorced</option>
-                    </select><br>
+                    </select><span class="error">* <?php echo $maritalErr;?><br>
      </div>  
      </div>
                     <label>Phone Number</label>
      	          <input    type="text" 
                               name="number" 
-                              placeholder="Phone Number"><br>
-                    </select><br>
+                              placeholder="Phone Number"><span class="error">* <?php echo $numberErr;?> </span><br><br>
 
                     <label>Email</label>
      	          <input    type="text" 
                               name="email" 
-                              placeholder="Email"><br>
-                    </select><br>
+                              placeholder="Email"><span class="error">* <?php echo $emailErr;?></span><br><br>
 
                     <label>Address</label>
      	          <input    type="text" 
                               name="address" 
-                              placeholder="Address"><br>
-                    </select><br>
+                              placeholder="Address"><span class="error">* <?php echo $addressErr;?></span><br><br>
 
                     <label>Date of Birth</label>
      	          <input    type="date" 
                               name="date_of_birth" 
-                              placeholder="Date of Birth"><br>
-                    </select><br>
+                              placeholder="Date of Birth"><span class="error">* <?php echo $date_of_birthErr;?></span><br><br>
 
                     <label>Hire Date</label>
      	          <input    type="date" 
                               name="date_of_hiring" 
-                              placeholder="Hire Date"><br>
-                    </select><br>
+                              placeholder="Hire Date"><span class="error">* <?php echo $date_of_hiringErr;?></span><br><br>
 
                     <label>Department</label>
      	          <input    type="text" 
                               name="department" 
-                              placeholder="Department"><br>
-                    </select><br>
+                              placeholder="Department"><span class="error">* <?php echo $departmentErr;?></span><br><br>
 
      <div class="row">
      <div class="column">
@@ -264,13 +381,37 @@
                                                                       <option value="yemenite">Yemenite</option>
                                                                       <option value="zambian">Zambian</option>
                                                                       <option value="zimbabwean">Zimbabwean</option>
-                                                                      </select>
-                    </select><br><br>
+                                                                      </select><span class="error">* <?php echo $nationalityErr;?></span><br><br>
 
      </div>  
           </div>
 
-     	<button type="submit">Sign Up</button>
+     	<button type="submit">Submit</button>
      </form>
+
+     <?php
+     echo "<h2> Your Input</h2>";
+               echo $name;
+               echo "<br>";
+               echo $gender;
+               echo "<br>"; 
+               echo $marital;
+               echo "<br>"; 
+               echo $number;
+               echo "<br>"; 
+               echo $email;
+               echo "<br>"; 
+               echo $address;
+               echo "<br>"; 
+               echo $date_of_birth;
+               echo "<br>"; 
+               echo $date_of_hiring;
+               echo "<br>"; 
+               echo $department;
+               echo "<br>"; 
+               echo $nationality;
+               echo "<br>";
+
+     ?>
 </body>
 </html>
